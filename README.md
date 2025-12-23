@@ -3,11 +3,18 @@
 An interactive, browser-based drag-and-drop game for learning and testing
 **white matter tract classification** in neuroanatomy.
 
-The game focuses on distinguishing between:
-- **Commissural fibers** – connections *between hemispheres*
-- **Association fibers** – connections *within the same hemisphere*
-
 🔗 **Live game:** https://royc4515.github.io/white-matter-tracts-game/
+
+---
+
+## 👩‍🎓 Student Instructions (Read First)
+
+1. Drag each item into the correct category: **Commissural** or **Association**.  
+2. Use **⚡ Training Mode** to practice with instant feedback.  
+3. Use **🧪 Test Mode** for assessment (no feedback until the end).  
+4. In Test Mode, choose a time (30 / 60 / 90 seconds). The timer starts on your **first drag**.  
+5. When finished, click **Check Answers** or wait for the timer to end.  
+6. Click **Reset** to try again.
 
 ---
 
@@ -77,10 +84,14 @@ Classification follows the instructor’s reference table.
 ---
 
 ## 📁 Project Files
+
 /
 ├── index.html # GitHub Pages redirect
 ├── white-matter-tracts-game.html # Main game (HTML/CSS/JS)
 └── README.md
+
+yaml
+Copy code
 
 ---
 
@@ -88,7 +99,11 @@ Classification follows the instructor’s reference table.
 
 1. Clone or download the repository
 2. Open:
-   white-matter-tracts-game.html
+
+white-matter-tracts-game.html
+
+yaml
+Copy code
 
 in any modern browser (Chrome recommended)
 
@@ -102,6 +117,9 @@ The game is hosted using **GitHub Pages**:
 
 https://royc4515.github.io/white-matter-tracts-game/
 
+yaml
+Copy code
+
 `index.html` automatically redirects to the main game file.
 
 ---
@@ -114,7 +132,6 @@ https://royc4515.github.io/white-matter-tracts-game/
   - Lectures
   - Tutorials
   - Student self-practice
-- Works on laptops, tablets, and classroom screens
 
 ---
 
@@ -129,4 +146,3 @@ https://royc4515.github.io/white-matter-tracts-game/
 ## 📄 License
 
 Free to use for **educational and academic purposes**.
-
