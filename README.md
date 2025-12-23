@@ -1,102 +1,132 @@
-# White Matter Tracts – Interactive Drag & Drop Game
+# White Matter Tracts Game
 
-An interactive, browser-based learning game for practicing **white matter tract classification**
-(**Commissural vs Association fibers**) using drag-and-drop.
+An interactive, browser-based drag-and-drop game for learning and testing
+**white matter tract classification** in neuroanatomy.
 
-Built for **neuroscience / neuroanatomy courses**, lectures, and self-practice.
-
----
-
-## 🎯 Learning Objective
-
-Students practice distinguishing between:
+The game focuses on distinguishing between:
 - **Commissural fibers** – connections *between hemispheres*
 - **Association fibers** – connections *within the same hemisphere*
 
-The game supports both **guided learning** and **exam-style testing**.
+🔗 **Live game:** https://royc4515.github.io/white-matter-tracts-game/
+
+---
+
+## 🎯 Learning Goals
+
+- Reinforce conceptual understanding of white matter organization
+- Practice correct classification of major tracts
+- Support both **guided learning** and **exam-style testing**
 
 ---
 
 ## 🕹️ Game Modes
 
-### ⚡ Training Mode (Instant Feedback)
-- Immediate feedback after every drag
-- Incorrect answers snap back automatically
+### ⚡ Training Mode (Practice)
+- Immediate feedback on every drag
+- Incorrect drops snap back automatically
 - Score counts **correct / total attempts**
 - Full tract names appear after correct placement
-- Success message when all 10 answers are correct
+- Success message when all 10 items are placed correctly
 
-Use for **learning, demonstration, and practice**.
+Best suited for **learning, demonstrations, and practice**.
 
 ---
 
-### 🧪 Test Mode (Exam Style)
+### 🧪 Test Mode (Assessment)
 - No feedback while dragging
 - Student must either:
   - Click **Check Answers**, or
-  - Wait until the **timer expires**
-- Results are shown with:
-  - ✅ Correct (green)
-  - ❌ Incorrect (red)
-  - Final score: **Correct X / 10**
-- Board is **locked after checking** (until Reset)
+  - Let the **timer expire**
+- Timer options: **30 / 60 / 90 seconds**
+- Timer starts **only on the first drag**
+- When time is up:
+  - All placed answers are **auto-checked**
+  - Score shown as **Correct X / 10**
+  - Board is **locked** until Reset
+- After manual checking, the board is also locked (exam-style)
 
-Use for **assessment or quizzes**.
+Best suited for **quizzes and assessment**.
 
 ---
 
 ## ⏱️ Time Control (Test Mode)
-- Toggle between **30 / 60 / 90 seconds**
+- Click the timer button to cycle between **30s / 60s / 90s**
 - Changing the time **resets all placements**
-- Timer starts **only on the first drag**
-- When time runs out:
-  - Answers are auto-checked
-  - Score is displayed
-  - Board is locked
+- Timer does not start until the first drag
 
 ---
 
-## 🧠 Content Covered
+## 🧠 Content Covered (Instructor Reference)
 
 ### Commissural
-- Corpus Callosum (CC)
-- Anterior Commissure (AC)
-- Posterior Commissure (PC)
 - Between hemispheres
+- CC – corpus callosum
+- AC – anterior commissure
+- PC – posterior commissure
 
 ### Association
-- Superior Longitudinal Fasciculus (SLF)
-- Inferior Longitudinal Fasciculus (ILF)
-- Inferior Fronto-Occipital Fasciculus (IFOF)
-- Uncinate Fasciculus (UNC)
-- Fornix
 - Within the same hemisphere
+- SLF – superior longitudinal fasciculus
+- ILF – inferior longitudinal fasciculus
+- IFOF – inferior fronto-occipital fasciculus
+- UNC – uncinate fasciculus
+- Fornix
 
-> Classification follows the instructor’s reference table.
-
----
-
-## 🖥️ Technical Details
-
-- Pure **HTML / CSS / JavaScript**
-- No external libraries or frameworks
-- Runs locally in any modern browser
-- Fixed to **100% viewport height** (no scrolling)
-- Optimized for **classroom projectors**
+Classification follows the instructor’s reference table.
 
 ---
 
-## ▶️ How to Run (Local)
+## 📁 Project Files
+/
+├── index.html # GitHub Pages redirect
+├── white-matter-tracts-game.html # Main game (HTML/CSS/JS)
+└── README.md
+
+---
+
+## ▶️ Run Locally
 
 1. Clone or download the repository
-2. Open **`white-matter-tracts-game.html`** in a browser (Chrome recommended)
-3. No installation or server required
+2. Open:
+   white-matter-tracts-game.html
+
+in any modern browser (Chrome recommended)
+
+No installation, server, or dependencies required.
 
 ---
 
-## 🌐 Online Version (GitHub Pages)
+## 🌐 Run Online (GitHub Pages)
 
-This project is designed to run on **GitHub Pages**.
+The game is hosted using **GitHub Pages**:
 
-If enabled, the game will be available at:
+https://royc4515.github.io/white-matter-tracts-game/
+
+`index.html` automatically redirects to the main game file.
+
+---
+
+## 🖥️ Classroom Use
+
+- Designed to fit **100% of the browser viewport** (no scrolling)
+- Large, high-contrast elements for projector visibility
+- Suitable for:
+  - Lectures
+  - Tutorials
+  - Student self-practice
+- Works on laptops, tablets, and classroom screens
+
+---
+
+## 🔁 Reset & Replay
+
+- **Reset** clears all placements and timers
+- Mode can be switched at any time
+- Timer choice persists until reset
+
+---
+
+## 📄 License
+
+Free to use for **educational and academic purposes**.
 
