@@ -4,20 +4,45 @@
 <meta charset="UTF-8" />
 <title>White Matter Drag Game</title>
 <style>
-  body { font-family: Arial; background:#f5f7fa; padding:20px; }
-  h2 { text-align:center; }
-  .board { display:flex; gap:20px; justify-content:center; }
+  body { font-family: Arial; background:#f5f7fa; padding:20px; margin:0; }
+  h2 { text-align:center; margin: 10px 0 20px; }
+
+  .board { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
   .zone {
     width:260px; min-height:260px; padding:10px;
     border:2px dashed #999; border-radius:10px; background:#fff;
   }
-  .zone h3 { text-align:center; }
+  .zone h3 { text-align:center; margin: 8px 0 12px; }
+
   .item {
     padding:8px; margin:6px 0; background:#e3e9ff;
     border-radius:6px; cursor:grab; text-align:center;
+    user-select: none;
   }
   .correct { background:#c8f7c5; }
   .wrong { background:#f7c5c5; }
+
+  /* Options laid out side-by-side (no scrolling needed) */
+  .options-wrap {
+    border: none !important;
+    background: none !important;
+    width: min(980px, 100%);
+    margin: 0 auto;
+    padding: 0;
+  }
+  .items-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: stretch;
+  }
+  .items-row .item {
+    margin: 0;                 /* remove vertical stacking margins */
+    min-width: 150px;          /* make tiles readable */
+  }
+
+  hr { margin: 18px auto; width: min(980px, 100%); }
 </style>
 </head>
 <body>
@@ -36,9 +61,9 @@
 
 <hr>
 
-<div class="zone" style="border:none; background:none">
-  <h3>Options</h3>
-  <div id="items">
+<div class="zone options-wrap">
+  <h3 style="text-align:center; margin: 0 0 10px;">Options</h3>
+  <div id="items" class="items-row">
     <div class="item" draggable="true" data-answer="commissural">Between hemispheres</div>
     <div class="item" draggable="true" data-answer="association">within the same hemisphere</div>
     <div class="item" draggable="true" data-answer="association">IFOF</div>
@@ -53,21 +78,33 @@
 </div>
 
 <script>
-let dragged;
+let dragged = null;
 
 document.querySelectorAll('.item').forEach(item => {
-  item.addEventListener('dragstart', e => dragged = item);
+  item.addEventListener('dragstart', () => {
+    dragged = item;
+  });
 });
 
 document.querySelectorAll('.zone').forEach(zone => {
   zone.addEventListener('dragover', e => e.preventDefault());
+
   zone.addEventListener('drop', () => {
     if (!dragged) return;
+
+    // only allow dropping into the 2 category zones (not the options wrapper)
+    const isCategoryZone = zone.dataset.type === "commissural" || zone.dataset.type === "association";
+    if (!isCategoryZone) return;
+
+    // mark correct/incorrect
     if (dragged.dataset.answer === zone.dataset.type) {
-      dragged.className = "item correct";
+      dragged.classList.remove("wrong");
+      dragged.classList.add("correct");
     } else {
-      dragged.className = "item wrong";
+      dragged.classList.remove("correct");
+      dragged.classList.add("wrong");
     }
+
     zone.appendChild(dragged);
     dragged = null;
   });
