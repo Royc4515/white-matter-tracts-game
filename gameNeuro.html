@@ -33,6 +33,17 @@
     border: 1px solid #d1d5db;
     font-weight: 700;
   }
+  .msg {
+    width: min(980px, 100%);
+    margin: 10px auto 0;
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    text-align: center;
+    font-weight: 700;
+    display: none;
+  }
 
   .board { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
   .zone {
@@ -78,8 +89,11 @@
 
 <div class="topbar">
   <button id="resetBtn" class="btn">Reset</button>
-  <div id="score" class="score">Score: 0 / 10</div>
+  <button id="doneBtn" class="btn">I'm done</button>
+  <div id="score" class="score">Score: 0 / 0 placed</div>
 </div>
+
+<div id="msg" class="msg"></div>
 
 <div class="board">
   <div class="zone" data-type="commissural">
@@ -115,55 +129,49 @@ let dragged = null;
 const optionsRow = document.getElementById("items");
 const scoreEl = document.getElementById("score");
 const resetBtn = document.getElementById("resetBtn");
+const doneBtn = document.getElementById("doneBtn");
+const msgEl = document.getElementById("msg");
 
-function updateScore() {
-  const all = document.querySelectorAll(".item");
-  let correct = 0;
-  all.forEach(it => {
-    if (it.classList.contains("correct")) correct++;
-  });
-  scoreEl.textContent = `Score: ${correct} / ${all.length}`;
+function isInOptions(item) {
+  return optionsRow.contains(item);
 }
 
 function clearMark(item) {
   item.classList.remove("correct", "wrong");
 }
 
+function showMsg(text) {
+  msgEl.textContent = text;
+  msgEl.style.display = "block";
+}
+
+function hideMsg() {
+  msgEl.style.display = "none";
+  msgEl.textContent = "";
+}
+
+function updateScore() {
+  const all = Array.from(document.querySelectorAll(".item"));
+  const placed = all.filter(it => !isInOptions(it)); // placed means in either category zone
+  const correct = placed.filter(it => it.classList.contains("correct")).length;
+  scoreEl.textContent = `Score: ${correct} / ${placed.length} placed`;
+}
+
+function snapBackToOptions(item) {
+  clearMark(item);
+  optionsRow.appendChild(item);
+  updateScore();
+}
+
+// drag start
 document.querySelectorAll('.item').forEach(item => {
   item.addEventListener('dragstart', () => {
     dragged = item;
+    hideMsg();
   });
 });
 
-document.querySelectorAll('.zone').forEach(zone => {
-  zone.addEventListener('dragover', e => e.preventDefault());
-
-  zone.addEventListener('drop', () => {
-    if (!dragged) return;
-
-    // allow drop into category zones OR back into options area
-    const isCategoryZone = zone.dataset.type === "commissural" || zone.dataset.type === "association";
-    const isOptionsZone = zone === optionsRow || zone.contains(optionsRow); // safety
-
-    if (isCategoryZone) {
-      if (dragged.dataset.answer === zone.dataset.type) {
-        dragged.classList.remove("wrong");
-        dragged.classList.add("correct");
-      } else {
-        dragged.classList.remove("correct");
-        dragged.classList.add("wrong");
-      }
-      zone.appendChild(dragged);
-      dragged = null;
-      updateScore();
-      return;
-    }
-
-    // (We don't actually have drop listeners on the optionsRow div yet, so nothing here)
-  });
-});
-
-// enable dropping items back into the Options row
+// allow dropping back into options
 optionsRow.addEventListener("dragover", e => e.preventDefault());
 optionsRow.addEventListener("drop", () => {
   if (!dragged) return;
@@ -173,13 +181,63 @@ optionsRow.addEventListener("drop", () => {
   updateScore();
 });
 
+// drop into category zones
+document.querySelectorAll('.zone').forEach(zone => {
+  zone.addEventListener('dragover', e => e.preventDefault());
+
+  zone.addEventListener('drop', () => {
+    if (!dragged) return;
+
+    const type = zone.dataset.type;
+    const isCategoryZone = type === "commissural" || type === "association";
+    if (!isCategoryZone) return;
+
+    // check correctness
+    const correctDrop = (dragged.dataset.answer === type);
+
+    if (correctDrop) {
+      dragged.classList.remove("wrong");
+      dragged.classList.add("correct");
+      zone.appendChild(dragged);
+      dragged = null;
+      updateScore();
+    } else {
+      // snap back immediately
+      const toSnap = dragged;
+      dragged = null;
+      snapBackToOptions(toSnap);
+      showMsg("Wrong — try again (snapped back).");
+    }
+  });
+});
+
+// Reset
 resetBtn.addEventListener("click", () => {
-  // move everything back to options and clear marks
+  hideMsg();
   document.querySelectorAll(".item").forEach(item => {
     clearMark(item);
     optionsRow.appendChild(item);
   });
   updateScore();
+});
+
+// Done / final check
+doneBtn.addEventListener("click", () => {
+  const all = Array.from(document.querySelectorAll(".item"));
+  const placed = all.filter(it => !isInOptions(it));
+  const total = all.length;
+
+  if (placed.length < total) {
+    showMsg(`Not finished: you placed ${placed.length} / ${total}.`);
+    return;
+  }
+
+  const correct = placed.filter(it => it.classList.contains("correct")).length;
+  if (correct === total) {
+    showMsg(`Perfect! ✅ ${correct} / ${total} correct.`);
+  } else {
+    showMsg(`Almost: ${correct} / ${total} correct. (Fix the ones that snapped back earlier.)`);
+  }
 });
 
 // initial score
