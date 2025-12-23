@@ -71,7 +71,7 @@
     gap: 14px;
     width: min(1100px, 100%);
     margin: 0 auto;
-    min-height: 0; /* important to prevent overflow in CSS grid */
+    min-height: 0;
   }
 
   .zone {
@@ -81,7 +81,7 @@
     padding: 10px;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* allow internal content to size without overflow */
+    min-height: 0;
   }
 
   .zone h3 {
@@ -130,28 +130,35 @@
   .items-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     justify-content: center;
+    gap: 12px;
   }
 
+  /* Options are ~25% bigger */
   .items-row .item {
-    cursor: grab;
-    padding: 10px 12px;
-    min-width: 150px;
+    padding: 13px 16px;          /* bigger */
+    min-width: 190px;            /* bigger */
+    font-size: clamp(13px, 1.7vw, 18px);
+    border-radius: 12px;
   }
 
-  /* Make sure on shorter screens it still fits */
-  @media (max-height: 750px) {
-    .app { padding: 8px; gap: 8px; }
-    .item { padding: 8px; border-radius: 10px; }
-    .items-row .item { padding: 8px 10px; min-width: 140px; }
+  /* Keep no-scroll on smaller heights by compacting spacing a bit */
+  @media (max-height: 780px) {
+    .app { gap: 8px; padding: 8px; }
+    .items-row { gap: 10px; }
+    .items-row .item { min-width: 175px; padding: 12px 14px; }
+    .zone-items { gap: 7px; }
+  }
+
+  @media (max-height: 690px) {
+    .items-row .item { min-width: 165px; padding: 11px 13px; font-size: 13px; }
     .zone { padding: 8px; }
+    .zone-items { gap: 6px; padding: 4px; }
   }
 
-  @media (max-height: 650px) {
-    .items-row { gap: 8px; }
-    .items-row .item { min-width: 130px; font-size: 12px; }
-    .zone-items { gap: 6px; }
+  @media (max-height: 620px) {
+    .items-row .item { min-width: 155px; padding: 10px 12px; font-size: 12px; }
+    .options h3 { margin: 6px 0 6px; }
   }
 </style>
 </head>
@@ -185,18 +192,55 @@
     <h3>Options</h3>
     <div id="items" class="items-row">
       <!-- Teacher table mapping (FIXED): Fornix is ASSOCIATION -->
-      <div class="item" draggable="true" data-answer="commissural">Between hemispheres</div>
-      <div class="item" draggable="true" data-answer="association">Within the same hemisphere</div>
+      <div class="item" draggable="true"
+           data-answer="commissural"
+           data-short="Between hemispheres"
+           data-full="Between hemispheres">Between hemispheres</div>
 
-      <div class="item" draggable="true" data-answer="commissural">PC</div>
-      <div class="item" draggable="true" data-answer="commissural">AC</div>
-      <div class="item" draggable="true" data-answer="commissural">CC</div>
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="Within the same hemisphere"
+           data-full="Within the same hemisphere">Within the same hemisphere</div>
 
-      <div class="item" draggable="true" data-answer="association">ILF</div>
-      <div class="item" draggable="true" data-answer="association">SLF</div>
-      <div class="item" draggable="true" data-answer="association">Fornix</div>
-      <div class="item" draggable="true" data-answer="association">UNC</div>
-      <div class="item" draggable="true" data-answer="association">IFOF</div>
+      <div class="item" draggable="true"
+           data-answer="commissural"
+           data-short="PC"
+           data-full="PC – posterior commissure">PC</div>
+
+      <div class="item" draggable="true"
+           data-answer="commissural"
+           data-short="AC"
+           data-full="AC – anterior commissure">AC</div>
+
+      <div class="item" draggable="true"
+           data-answer="commissural"
+           data-short="CC"
+           data-full="CC – corpus callosum">CC</div>
+
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="ILF"
+           data-full="ILF – inferior longitudinal fasciculus">ILF</div>
+
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="SLF"
+           data-full="SLF – superior longitudinal fasciculus">SLF</div>
+
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="Fornix"
+           data-full="Fornix">Fornix</div>
+
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="UNC"
+           data-full="UNC – uncinate fasciculus">UNC</div>
+
+      <div class="item" draggable="true"
+           data-answer="association"
+           data-short="IFOF"
+           data-full="IFOF – inferior frontooccipital fasciculus">IFOF</div>
     </div>
   </div>
 </div>
@@ -218,6 +262,14 @@ function isInOptions(item) {
 
 function clearMark(item) {
   item.classList.remove("correct", "wrong");
+}
+
+function setShortLabel(item) {
+  item.textContent = item.dataset.short || item.textContent;
+}
+
+function setFullLabel(item) {
+  item.textContent = item.dataset.full || item.textContent;
 }
 
 function showMsg(text) {
@@ -248,19 +300,22 @@ function checkSuccess() {
   const allPlaced = all.every(it => !isInOptions(it));
   const allCorrect = all.every(it => it.classList.contains("correct"));
   if (allPlaced && allCorrect) {
-    showMsg("Success! ✅ All 10 are correct.");
+    showMsg(`Success! ✅ All 10 are correct. Accuracy: ${correctTries}/${totalTries} tries`);
   }
 }
 
 function snapBackToOptions(item) {
   clearMark(item);
+  setShortLabel(item);          // keep options clean/short
   optionsRow.appendChild(item);
 }
 
 document.querySelectorAll(".item").forEach(item => {
+  // ensure initial label is short (important if HTML edited)
+  setShortLabel(item);
+
   item.addEventListener("dragstart", () => {
     dragged = item;
-    // keep success message until reset
     if (!msgEl.textContent.startsWith("Success")) hideMsg();
   });
 });
@@ -270,11 +325,12 @@ optionsRow.addEventListener("dragover", e => e.preventDefault());
 optionsRow.addEventListener("drop", () => {
   if (!dragged) return;
   clearMark(dragged);
+  setShortLabel(dragged);
   optionsRow.appendChild(dragged);
   dragged = null;
 });
 
-// category zones: snap back on wrong, count tries
+// category zones
 document.querySelectorAll(".zone").forEach(zone => {
   zone.addEventListener("dragover", e => e.preventDefault());
 
@@ -292,6 +348,10 @@ document.querySelectorAll(".zone").forEach(zone => {
       correctTries++;
       dragged.classList.remove("wrong");
       dragged.classList.add("correct");
+
+      // Expand abbreviations ONLY after correct placement
+      setFullLabel(dragged);
+
       zone.querySelector(".zone-items").appendChild(dragged);
       dragged = null;
 
@@ -301,7 +361,6 @@ document.querySelectorAll(".zone").forEach(zone => {
       const toSnap = dragged;
       dragged = null;
 
-      // tiny feedback flash, then snap back clean
       toSnap.classList.remove("correct");
       toSnap.classList.add("wrong");
       updateScore();
@@ -311,7 +370,7 @@ document.querySelectorAll(".zone").forEach(zone => {
   });
 });
 
-// reset: return all, clear marks, reset counters, shuffle, hide message
+// reset
 resetBtn.addEventListener("click", () => {
   hideMsg();
   totalTries = 0;
@@ -319,6 +378,7 @@ resetBtn.addEventListener("click", () => {
 
   document.querySelectorAll(".item").forEach(item => {
     clearMark(item);
+    setShortLabel(item);
     optionsRow.appendChild(item);
   });
 
