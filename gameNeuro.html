@@ -44,7 +44,6 @@
     font-weight: 800;
     font-size: 16px;
   }
-
   .btn.secondary { background: #374151; }
   .btn.active { outline: 3px solid #60a5fa; }
   .btn:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -149,7 +148,7 @@
     gap: 14px;
   }
 
-  /* options size stays as-is */
+  /* Keep options size exactly as before */
   .items-row .item {
     padding: 20px 22px;
     min-width: 240px;
@@ -181,8 +180,8 @@
     <h2>Drag each item to the correct category</h2>
 
     <div class="topbar">
-      <!-- ✅ One toggle mode button -->
-      <button id="modeToggleBtn" class="btn active">Mode: Instant Check</button>
+      <!-- Single toggle mode button -->
+      <button id="modeToggleBtn" class="btn active">⚡ Training Mode</button>
 
       <button id="resetBtn" class="btn">Reset</button>
       <button id="checkAnswersBtn" class="btn secondary" style="display:none;">Check Answers</button>
@@ -208,7 +207,7 @@
   <div class="options">
     <h3>Options</h3>
     <div id="items" class="items-row">
-      <!-- Teacher key (Fornix is association) -->
+      <!-- Teacher key -->
       <div class="item" draggable="true" data-answer="commissural"
            data-short="Between hemispheres" data-full="Between hemispheres">Between hemispheres</div>
 
@@ -255,12 +254,11 @@ const checkAnswersBtn = document.getElementById("checkAnswersBtn");
 
 const zones = Array.from(document.querySelectorAll(".zone"));
 
-let mode = "instant"; // "instant" | "checkAfter"
+let mode = "instant"; // "instant" (⚡ Training) | "checkAfter" (🧪 Test)
 
 let totalTries = 0;
-let correctTries = 0; // Mode 1 metric
-
-let checkedOnce = false; // Mode 2
+let correctTries = 0; // Training metric (correct / tries)
+let checkedOnce = false; // Test mode
 
 function isInOptions(item) { return optionsRow.contains(item); }
 function clearMark(item) { item.classList.remove("correct", "wrong"); }
@@ -295,8 +293,8 @@ function placedCount() {
 
 function updateModeButtonLabel() {
   modeToggleBtn.textContent = (mode === "instant")
-    ? "Mode: Instant Check"
-    : "Mode: Check After All";
+    ? "⚡ Training Mode"
+    : "🧪 Test Mode";
 }
 
 function updateUIForMode() {
@@ -304,11 +302,9 @@ function updateUIForMode() {
   document.querySelectorAll(".item").forEach(it => clearMark(it));
 
   if (mode === "instant") {
-    modeToggleBtn.classList.add("active");
     checkAnswersBtn.style.display = "none";
     scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
   } else {
-    modeToggleBtn.classList.add("active");
     checkAnswersBtn.style.display = "inline-block";
     checkedOnce = false;
     scoreEl.textContent = `Score: 0 / 10`;
@@ -342,7 +338,7 @@ function snapBackToOptions(item) {
   optionsRow.appendChild(item);
 }
 
-function checkSuccessMode1() {
+function checkSuccessTraining() {
   const all = Array.from(document.querySelectorAll(".item"));
   const allDone = all.every(i => !isInOptions(i) && i.classList.contains("correct"));
   if (allDone) {
@@ -350,12 +346,12 @@ function checkSuccessMode1() {
   }
 }
 
-function updateCheckButtonStateMode2() {
+function updateCheckButtonStateTest() {
   if (mode !== "checkAfter") return;
   checkAnswersBtn.disabled = (placedCount() !== 10);
 }
 
-function runCheckAnswersMode2() {
+function runCheckAnswersTest() {
   if (placedCount() !== 10) return;
 
   let correct = 0;
@@ -371,7 +367,7 @@ function runCheckAnswersMode2() {
 
     if (ok) correct++;
 
-    // expand abbreviations on check
+    // Expand abbreviations only after check
     setFull(item);
     markPlaced(item, true);
   });
@@ -381,7 +377,6 @@ function runCheckAnswersMode2() {
   if (correct === 10) {
     showMsg(`Success! ✅ All 10 correct. Score: ${correct}/10`);
   } else {
-    // ✅ nicer emoji legend instead of "green=right, red=wrong"
     showMsg(`Checked. ✅ Correct: ${correct}/10   🟩✅   🟥❌`);
   }
 
@@ -407,7 +402,7 @@ optionsRow.addEventListener("drop", () => {
   markPlaced(dragged, false);
   optionsRow.appendChild(dragged);
   dragged = null;
-  updateCheckButtonStateMode2();
+  updateCheckButtonStateTest();
 });
 
 zones.forEach(zone => {
@@ -441,21 +436,21 @@ zones.forEach(zone => {
 
       scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
       const finished = Array.from(document.querySelectorAll(".item")).every(i => !isInOptions(i));
-      if (finished) checkSuccessMode1();
+      if (finished) checkSuccessTraining();
     } else {
-      // Mode 2: no immediate validation
+      // Test mode: no immediate validation
       if (!checkedOnce) {
         clearMark(dragged);
         setShort(dragged);
       } else {
-        // moving after check invalidates grading until next check
+        // If moved after checking, invalidate grading
         clearMark(dragged);
         setShort(dragged);
         hideMsg();
         scoreEl.textContent = `Score: 0 / 10`;
         checkedOnce = false;
       }
-      updateCheckButtonStateMode2();
+      updateCheckButtonStateTest();
     }
 
     dragged = null;
@@ -466,10 +461,10 @@ zones.forEach(zone => {
 resetBtn.addEventListener("click", resetGame);
 
 checkAnswersBtn.addEventListener("click", () => {
-  if (mode === "checkAfter") runCheckAnswersMode2();
+  if (mode === "checkAfter") runCheckAnswersTest();
 });
 
-// ✅ One toggle mode button
+// Toggle between Training and Test modes
 modeToggleBtn.addEventListener("click", () => {
   mode = (mode === "instant") ? "checkAfter" : "instant";
   updateUIForMode();
