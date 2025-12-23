@@ -9,7 +9,6 @@
   html, body { height: 100%; margin: 0; overflow: hidden; }
   body { font-family: Arial, sans-serif; background:#f5f7fa; }
 
-  /* Full-screen layout: header / board / options */
   .app {
     height: 100vh;
     display: grid;
@@ -18,7 +17,6 @@
     padding: 8px;
   }
 
-  /* ✅ Smaller title from the start */
   h2 {
     margin: 0;
     text-align: center;
@@ -36,7 +34,6 @@
     margin-top: 4px;
   }
 
-  /* ✅ Smaller controls */
   .btn {
     padding: 8px 12px;
     border: 0;
@@ -48,6 +45,10 @@
     font-size: 16px;
   }
 
+  .btn.secondary { background: #374151; }
+  .btn.active { outline: 3px solid #60a5fa; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
   .score {
     padding: 8px 12px;
     background: white;
@@ -57,7 +58,6 @@
     font-size: 18px;
   }
 
-  /* ✅ Smaller success banner */
   .msg {
     margin: 4px auto 0;
     width: min(1200px, 100%);
@@ -72,7 +72,6 @@
     display: none;
   }
 
-  /* ===== Board ===== */
   .board {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -106,10 +105,9 @@
     flex-direction: column;
     gap: 8px;
     padding: 4px;
-    overflow: hidden; /* no internal scroll needed once header is smaller */
+    overflow: hidden;
   }
 
-  /* Base item */
   .item {
     background: #e3e9ff;
     border-radius: 18px;
@@ -117,19 +115,19 @@
     cursor: grab;
     user-select: none;
     font-weight: 900;
+    transition: transform .05s ease;
   }
+  .item:active { transform: scale(0.99); }
 
   .correct { background:#c8f7c5; }
   .wrong { background:#f7c5c5; }
 
-  /* Placed items (same size as earlier versions; not shrinking options) */
   .placed {
     padding: 12px 14px;
     font-size: clamp(16px, 1.6vw, 22px);
     border-radius: 16px;
   }
 
-  /* ===== Options ===== */
   .options {
     width: min(1200px, 100%);
     margin: 0 auto;
@@ -151,7 +149,7 @@
     gap: 14px;
   }
 
-  /* ✅ Options size stays EXACTLY as before the recent changes (the baseline big options) */
+  /* options size stays as-is */
   .items-row .item {
     padding: 20px 22px;
     min-width: 240px;
@@ -159,7 +157,6 @@
     border-radius: 18px;
   }
 
-  /* Keep no-scroll on smaller projectors */
   @media (max-height: 720px) {
     h2 { font-size: 18px; }
     .btn { font-size: 15px; padding: 7px 11px; }
@@ -184,7 +181,12 @@
     <h2>Drag each item to the correct category</h2>
 
     <div class="topbar">
+      <!-- ✅ One toggle mode button -->
+      <button id="modeToggleBtn" class="btn active">Mode: Instant Check</button>
+
       <button id="resetBtn" class="btn">Reset</button>
+      <button id="checkAnswersBtn" class="btn secondary" style="display:none;">Check Answers</button>
+
       <div id="score" class="score">Score: 0 / 0 tries</div>
     </div>
 
@@ -206,45 +208,36 @@
   <div class="options">
     <h3>Options</h3>
     <div id="items" class="items-row">
+      <!-- Teacher key (Fornix is association) -->
       <div class="item" draggable="true" data-answer="commissural"
-           data-short="Between hemispheres"
-           data-full="Between hemispheres">Between hemispheres</div>
+           data-short="Between hemispheres" data-full="Between hemispheres">Between hemispheres</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="Within the same hemisphere"
-           data-full="Within the same hemisphere">Within the same hemisphere</div>
-
-      <div class="item" draggable="true" data-answer="commissural"
-           data-short="PC"
-           data-full="PC – posterior commissure">PC</div>
+           data-short="Within the same hemisphere" data-full="Within the same hemisphere">Within the same hemisphere</div>
 
       <div class="item" draggable="true" data-answer="commissural"
-           data-short="AC"
-           data-full="AC – anterior commissure">AC</div>
+           data-short="PC" data-full="PC – posterior commissure">PC</div>
 
       <div class="item" draggable="true" data-answer="commissural"
-           data-short="CC"
-           data-full="CC – corpus callosum">CC</div>
+           data-short="AC" data-full="AC – anterior commissure">AC</div>
+
+      <div class="item" draggable="true" data-answer="commissural"
+           data-short="CC" data-full="CC – corpus callosum">CC</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="ILF"
-           data-full="ILF – inferior longitudinal fasciculus">ILF</div>
+           data-short="ILF" data-full="ILF – inferior longitudinal fasciculus">ILF</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="SLF"
-           data-full="SLF – superior longitudinal fasciculus">SLF</div>
+           data-short="SLF" data-full="SLF – superior longitudinal fasciculus">SLF</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="Fornix"
-           data-full="Fornix">Fornix</div>
+           data-short="Fornix" data-full="Fornix">Fornix</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="UNC"
-           data-full="UNC – uncinate fasciculus">UNC</div>
+           data-short="UNC" data-full="UNC – uncinate fasciculus">UNC</div>
 
       <div class="item" draggable="true" data-answer="association"
-           data-short="IFOF"
-           data-full="IFOF – inferior frontooccipital fasciculus">IFOF</div>
+           data-short="IFOF" data-full="IFOF – inferior frontooccipital fasciculus">IFOF</div>
     </div>
   </div>
 </div>
@@ -257,28 +250,31 @@ const scoreEl = document.getElementById("score");
 const resetBtn = document.getElementById("resetBtn");
 const msgEl = document.getElementById("msg");
 
+const modeToggleBtn = document.getElementById("modeToggleBtn");
+const checkAnswersBtn = document.getElementById("checkAnswersBtn");
+
+const zones = Array.from(document.querySelectorAll(".zone"));
+
+let mode = "instant"; // "instant" | "checkAfter"
+
 let totalTries = 0;
-let correctTries = 0;
+let correctTries = 0; // Mode 1 metric
+
+let checkedOnce = false; // Mode 2
 
 function isInOptions(item) { return optionsRow.contains(item); }
 function clearMark(item) { item.classList.remove("correct", "wrong"); }
 function setShort(item) { item.textContent = item.dataset.short; }
 function setFull(item) { item.textContent = item.dataset.full; }
-
 function markPlaced(item, placed) {
   if (placed) item.classList.add("placed");
   else item.classList.remove("placed");
-}
-
-function updateScore() {
-  scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
 }
 
 function showMsg(text) {
   msgEl.textContent = text;
   msgEl.style.display = "block";
 }
-
 function hideMsg() {
   msgEl.style.display = "none";
   msgEl.textContent = "";
@@ -293,12 +289,50 @@ function shuffleOptions() {
   items.forEach(it => optionsRow.appendChild(it));
 }
 
-function checkSuccess() {
-  const all = Array.from(document.querySelectorAll(".item"));
-  const allDone = all.every(i => !isInOptions(i) && i.classList.contains("correct"));
-  if (allDone) {
-    showMsg(`Success! ✅ All 10 correct. Accuracy: ${correctTries}/${totalTries}`);
+function placedCount() {
+  return Array.from(document.querySelectorAll(".item")).filter(i => !isInOptions(i)).length;
+}
+
+function updateModeButtonLabel() {
+  modeToggleBtn.textContent = (mode === "instant")
+    ? "Mode: Instant Check"
+    : "Mode: Check After All";
+}
+
+function updateUIForMode() {
+  hideMsg();
+  document.querySelectorAll(".item").forEach(it => clearMark(it));
+
+  if (mode === "instant") {
+    modeToggleBtn.classList.add("active");
+    checkAnswersBtn.style.display = "none";
+    scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
+  } else {
+    modeToggleBtn.classList.add("active");
+    checkAnswersBtn.style.display = "inline-block";
+    checkedOnce = false;
+    scoreEl.textContent = `Score: 0 / 10`;
+    checkAnswersBtn.disabled = (placedCount() !== 10);
   }
+
+  updateModeButtonLabel();
+}
+
+function resetGame() {
+  hideMsg();
+  totalTries = 0;
+  correctTries = 0;
+  checkedOnce = false;
+
+  document.querySelectorAll(".item").forEach(item => {
+    clearMark(item);
+    setShort(item);
+    markPlaced(item, false);
+    optionsRow.appendChild(item);
+  });
+
+  shuffleOptions();
+  updateUIForMode();
 }
 
 function snapBackToOptions(item) {
@@ -308,6 +342,53 @@ function snapBackToOptions(item) {
   optionsRow.appendChild(item);
 }
 
+function checkSuccessMode1() {
+  const all = Array.from(document.querySelectorAll(".item"));
+  const allDone = all.every(i => !isInOptions(i) && i.classList.contains("correct"));
+  if (allDone) {
+    showMsg(`Success! ✅ All 10 correct. Accuracy: ${correctTries}/${totalTries}`);
+  }
+}
+
+function updateCheckButtonStateMode2() {
+  if (mode !== "checkAfter") return;
+  checkAnswersBtn.disabled = (placedCount() !== 10);
+}
+
+function runCheckAnswersMode2() {
+  if (placedCount() !== 10) return;
+
+  let correct = 0;
+  const placed = Array.from(document.querySelectorAll(".item")).filter(i => !isInOptions(i));
+
+  placed.forEach(item => {
+    const parentZone = item.closest(".zone");
+    const zoneType = parentZone ? parentZone.dataset.type : "";
+    const ok = (item.dataset.answer === zoneType);
+
+    item.classList.toggle("correct", ok);
+    item.classList.toggle("wrong", !ok);
+
+    if (ok) correct++;
+
+    // expand abbreviations on check
+    setFull(item);
+    markPlaced(item, true);
+  });
+
+  scoreEl.textContent = `Score: ${correct} / 10`;
+
+  if (correct === 10) {
+    showMsg(`Success! ✅ All 10 correct. Score: ${correct}/10`);
+  } else {
+    // ✅ nicer emoji legend instead of "green=right, red=wrong"
+    showMsg(`Checked. ✅ Correct: ${correct}/10   🟩✅   🟥❌`);
+  }
+
+  checkedOnce = true;
+}
+
+/* Drag setup */
 document.querySelectorAll(".item").forEach(item => {
   setShort(item);
   markPlaced(item, false);
@@ -318,7 +399,6 @@ document.querySelectorAll(".item").forEach(item => {
   });
 });
 
-// drop back to options
 optionsRow.addEventListener("dragover", e => e.preventDefault());
 optionsRow.addEventListener("drop", () => {
   if (!dragged) return;
@@ -327,59 +407,77 @@ optionsRow.addEventListener("drop", () => {
   markPlaced(dragged, false);
   optionsRow.appendChild(dragged);
   dragged = null;
+  updateCheckButtonStateMode2();
 });
 
-// drop into zones
-document.querySelectorAll(".zone").forEach(zone => {
+zones.forEach(zone => {
   zone.addEventListener("dragover", e => e.preventDefault());
   zone.addEventListener("drop", () => {
     if (!dragged) return;
 
-    totalTries++;
-    const ok = (dragged.dataset.answer === zone.dataset.type);
+    const type = zone.dataset.type;
+    zone.querySelector(".zone-items").appendChild(dragged);
+    markPlaced(dragged, true);
 
-    if (ok) {
-      correctTries++;
-      dragged.classList.add("correct");
-      dragged.classList.remove("wrong");
-      setFull(dragged);          // expand only after correct placement
-      markPlaced(dragged, true);
-      zone.querySelector(".zone-items").appendChild(dragged);
-      dragged = null;
+    if (mode === "instant") {
+      totalTries++;
+      const ok = (dragged.dataset.answer === type);
 
-      updateScore();
-      checkSuccess();
+      if (ok) {
+        correctTries++;
+        dragged.classList.add("correct");
+        dragged.classList.remove("wrong");
+        setFull(dragged); // expand only after correct placement
+      } else {
+        dragged.classList.add("wrong");
+        dragged.classList.remove("correct");
+        scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
+
+        const snap = dragged;
+        dragged = null;
+        setTimeout(() => snapBackToOptions(snap), 120);
+        return;
+      }
+
+      scoreEl.textContent = `Score: ${correctTries} / ${totalTries} tries`;
+      const finished = Array.from(document.querySelectorAll(".item")).every(i => !isInOptions(i));
+      if (finished) checkSuccessMode1();
     } else {
-      dragged.classList.add("wrong");
-      dragged.classList.remove("correct");
-      updateScore();
-
-      const snap = dragged;
-      dragged = null;
-      setTimeout(() => snapBackToOptions(snap), 120);
+      // Mode 2: no immediate validation
+      if (!checkedOnce) {
+        clearMark(dragged);
+        setShort(dragged);
+      } else {
+        // moving after check invalidates grading until next check
+        clearMark(dragged);
+        setShort(dragged);
+        hideMsg();
+        scoreEl.textContent = `Score: 0 / 10`;
+        checkedOnce = false;
+      }
+      updateCheckButtonStateMode2();
     }
+
+    dragged = null;
   });
 });
 
-// reset
-resetBtn.addEventListener("click", () => {
-  hideMsg();
-  totalTries = 0;
-  correctTries = 0;
+/* Buttons */
+resetBtn.addEventListener("click", resetGame);
 
-  document.querySelectorAll(".item").forEach(item => {
-    clearMark(item);
-    setShort(item);
-    markPlaced(item, false);
-    optionsRow.appendChild(item);
-  });
-
-  shuffleOptions();
-  updateScore();
+checkAnswersBtn.addEventListener("click", () => {
+  if (mode === "checkAfter") runCheckAnswersMode2();
 });
 
+// ✅ One toggle mode button
+modeToggleBtn.addEventListener("click", () => {
+  mode = (mode === "instant") ? "checkAfter" : "instant";
+  updateUIForMode();
+});
+
+/* Init */
 shuffleOptions();
-updateScore();
+updateUIForMode();
 </script>
 
 </body>
