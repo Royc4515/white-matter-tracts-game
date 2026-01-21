@@ -60,5 +60,5 @@ The game covers the classification of major tracts:
 ---
 
 <p align="center">
-  <sub>Built with ❤️ by Roy Carmelli</sub>
+  <sub>Built with 🧠 by Roy Carmelli</sub>
 </p>
