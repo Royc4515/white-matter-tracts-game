@@ -1,148 +1,64 @@
-# White Matter Tracts Game
+# 🧠 White Matter Tracts Game
 
-An interactive, browser-based drag-and-drop game for learning and testing
-**white matter tract classification** in neuroanatomy.
+A modern, interactive drag-and-drop game for mastering **white matter tract classification** in neuroanatomy. Designed for medical students and neuroscience enthusiasts.
 
-🔗 **Live game:** https://royc4515.github.io/white-matter-tracts-game/
-
----
-
-## 👩‍🎓 Student Instructions (Read First)
-
-1. Drag each item into the correct category: **Commissural** or **Association**.  
-2. Use **⚡ Training Mode** to practice with instant feedback.  
-3. Use **🧪 Test Mode** for assessment (no feedback until the end).  
-4. In Test Mode, choose a time (30 / 60 / 90 seconds). The timer starts on your **first drag**.  
-5. When finished, click **Check Answers** or wait for the timer to end.  
-6. Click **Reset** to try again.
+🔗 **Play Live:** [https://royc4515.github.io/white-matter-tracts-game/](https://royc4515.github.io/white-matter-tracts-game/)
 
 ---
 
-## 🎯 Learning Goals
+## ✨ Features
 
-- Reinforce conceptual understanding of white matter organization
-- Practice correct classification of major tracts
-- Support both **guided learning** and **exam-style testing**
+- **⚡ Training Mode**: Instant feedback. Learn by doing with immediate visual cues for correct/incorrect placements.
+- **🧪 Test Mode**: Exam-style assessment.
+    - Timer options: **30s / 60s / 90s**.
+    - Board locks upon completion or timeout.
+    - **Confetti Celebration** for perfect scores! 🎉
+- **🎨 Modern UI**:
+    - Clean, scientific aesthetic using **Inter** typography.
+    - **Glassmorphism** effects and smooth transitions.
+    - Mobile-responsive design for learning on the go.
 
----
+## 📁 Project Structure
 
-## 🕹️ Game Modes
+This project uses a clean, vanilla web stack (no build tools required):
 
-### ⚡ Training Mode (Practice)
-- Immediate feedback on every drag
-- Incorrect drops snap back automatically
-- Score counts **correct / total attempts**
-- Full tract names appear after correct placement
-- Success message when all 10 items are placed correctly
-
-Best suited for **learning, demonstrations, and practice**.
-
----
-
-### 🧪 Test Mode (Assessment)
-- No feedback while dragging
-- Student must either:
-  - Click **Check Answers**, or
-  - Let the **timer expire**
-- Timer options: **30 / 60 / 90 seconds**
-- Timer starts **only on the first drag**
-- When time is up:
-  - All placed answers are **auto-checked**
-  - Score shown as **Correct X / 10**
-  - Board is **locked** until Reset
-- After manual checking, the board is also locked (exam-style)
-
-Best suited for **quizzes and assessment**.
-
----
-
-## ⏱️ Time Control (Test Mode)
-- Click the timer button to cycle between **30s / 60s / 90s**
-- Changing the time **resets all placements**
-- Timer does not start until the first drag
-
----
-
-## 🧠 Content Covered (Instructor Reference)
-
-### Commissural
-- Between hemispheres
-- CC – corpus callosum
-- AC – anterior commissure
-- PC – posterior commissure
-
-### Association
-- Within the same hemisphere
-- SLF – superior longitudinal fasciculus
-- ILF – inferior longitudinal fasciculus
-- IFOF – inferior fronto-occipital fasciculus
-- UNC – uncinate fasciculus
-- Fornix
-
-Classification follows the instructor’s reference table.
-
----
-
-## 📁 Project Files
-
+```text
 /
-├── index.html # GitHub Pages redirect
-├── white-matter-tracts-game.html # Main game (HTML/CSS/JS)
-└── README.md
+├── index.html      # Main game structure and layout
+├── style.css       # Modern styling, animations, and responsive design
+├── script.js       # Game logic, drag-and-drop state, and timer handling
+└── README.md       # Project documentation
+```
 
-yaml
-Copy code
+## 🚀 How to Run Locally
 
----
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Royc4515/white-matter-tracts-game.git
+    ```
+2.  **Open the game:**
+    Simply open the `index.html` file in any modern web browser (Chrome, Firefox, Safari, Edge).
 
-## ▶️ Run Locally
+    No server or installation required!
 
-1. Clone or download the repository
-2. Open:
+## 🎓 Educational Content
 
-white-matter-tracts-game.html
+The game covers the classification of major tracts:
 
-yaml
-Copy code
+### Commissural Tracts (Between Hemispheres)
+*   **CC** – Corpus Callosum
+*   **AC** – Anterior Commissure
+*   **PC** – Posterior Commissure
 
-in any modern browser (Chrome recommended)
-
-No installation, server, or dependencies required.
-
----
-
-## 🌐 Run Online (GitHub Pages)
-
-The game is hosted using **GitHub Pages**:
-
-https://royc4515.github.io/white-matter-tracts-game/
-
-yaml
-Copy code
-
-`index.html` automatically redirects to the main game file.
+### Association Tracts (Within Hemisphere)
+*   **SLF** – Superior Longitudinal Fasciculus
+*   **ILF** – Inferior Longitudinal Fasciculus
+*   **IFOF** – Inferior Fronto-Occipital Fasciculus
+*   **UNC** – Uncinate Fasciculus
+*   **Fornix**
 
 ---
 
-## 🖥️ Classroom Use
-
-- Designed to fit **100% of the browser viewport** (no scrolling)
-- Large, high-contrast elements for projector visibility
-- Suitable for:
-  - Lectures
-  - Tutorials
-  - Student self-practice
-
----
-
-## 🔁 Reset & Replay
-
-- **Reset** clears all placements and timers
-- Mode can be switched at any time
-- Timer choice persists until reset
-
----
-
-## 📄 License
-
-Free to use for **educational and academic purposes**.
+<p align="center">
+  <sub>Built with ❤️ by Roy Carmelli</sub>
+</p>
